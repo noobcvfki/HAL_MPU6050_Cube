@@ -227,3 +227,26 @@ void I2CSendLen(uint8_t addr, uint8_t reg,  uint16_t len, uint8_t *data)
     I2CStop();
 
 }
+
+void I2CReceiveLen(uint8_t addr , uint8_t reg, uint16_t len, uint8_t *data)
+{
+    I2CStart();
+    I2CSendByte(addr<<1 | 0x00);//发送地址（写）
+    I2CWaitAck();
+    I2CSendByte(reg);//发送寄存器地址
+    I2CWaitAck();
+
+    I2CStart();
+    I2CSendByte(addr<<1 | 0x01);//发送地址（读）
+    I2CWaitAck();
+    while (len--)
+    {
+        *data++ = I2CReceiveByte();
+        if (len == 0) {
+            I2CSendNotAck(); // 最后一个字节发送 NACK
+        } else {
+            I2CSendAck();    // 继续读下一个字节
+        }
+    }
+    I2CStop();
+}
