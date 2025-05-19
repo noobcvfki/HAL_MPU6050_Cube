@@ -211,3 +211,19 @@ void I2CInit(void)
     GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
+
+void I2CSendLen(uint8_t addr, uint8_t reg,  uint16_t len, uint8_t *data)
+{
+    I2CStart();
+    I2CSendByte(addr << 1 |0x00); //发送地址（写）
+    I2CWaitAck();
+    I2CSendByte(reg);//发送寄存器地址
+    I2CWaitAck();
+    for (int i = 0; i < len; i++)
+    {
+        I2CSendByte(data[i]);
+        I2CWaitAck();
+    }
+    I2CStop();
+
+}
