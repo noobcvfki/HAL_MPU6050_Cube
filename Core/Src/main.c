@@ -88,14 +88,14 @@ int main(void)
     MX_GPIO_Init();
     /* USER CODE BEGIN 2 */
     OLED_Init();
-    MPU6050_Init();
+    MPU_Init();
+    while(mpu_dmp_init())
+    {
+        HAL_Delay(20);
+    }
 
-    MPU6050_WriteReg(0x6B, 0x00);
-    MPU6050_WriteReg(0x19, 0x66);
 
-    uint8_t id = MPU6050_ReadReg(0x19);
-
-    int16_t Accx, Accy, Accz, Gyrox, Gyroy, Gyroz;
+    float pitch,roll,yaw;
 
     // OLED_ShowHexNum(1,1,id,2,OLED_8X16);
     // OLED_Update();
@@ -105,13 +105,11 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-        MPU6050_GetData(&Accx, &Accy, &Accz, &Gyrox, &Gyroy, &Gyroz);
-        OLED_ShowSignedNum(1, 1, Accx, 5,OLED_8X16);
-        OLED_ShowSignedNum(1, 20, Accy, 5,OLED_8X16);
-        OLED_ShowSignedNum(1, 40, Accz, 5,OLED_8X16);
-        OLED_ShowSignedNum(60, 1, Gyrox, 5,OLED_8X16);
-        OLED_ShowSignedNum(60, 20, Gyroy, 5,OLED_8X16);
-        OLED_ShowSignedNum(60, 40, Gyroz, 5,OLED_8X16);
+
+        mpu_dmp_get_data(&pitch,&roll,&yaw);
+        OLED_ShowFloatNum(1,1,pitch,3,3,OLED_8X16);
+        OLED_ShowFloatNum(1,20,roll,3,3,OLED_8X16);
+        OLED_ShowFloatNum(1,40,yaw,3,3,OLED_8X16);
 
         OLED_Update();
         /* USER CODE END WHILE */

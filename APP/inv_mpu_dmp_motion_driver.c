@@ -23,10 +23,10 @@
 #include "inv_mpu_dmp_motion_driver.h"
 #include "dmpKey.h"
 #include "dmpmap.h"
-#include "usart.h"
-#include "delay.h"
+// #include "usart.h"
+#include "main.h"
 
-//¶¨ÒåÄ¿±ê°å²ÉÓÃMSP430
+//ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½MSP430
 #define  MOTION_DRIVER_TARGET_MSP430
 
 /* The following functions must be defined for this platform:
@@ -40,7 +40,7 @@
 #if defined MOTION_DRIVER_TARGET_MSP430
 //#include "msp430.h"
 //#include "msp430_clock.h"
-#define delay_ms    delay_ms
+#define delay_ms    HAL_Delay
 #define get_ms      mget_ms
 #define log_i 		printf
 #define log_e  		printf
